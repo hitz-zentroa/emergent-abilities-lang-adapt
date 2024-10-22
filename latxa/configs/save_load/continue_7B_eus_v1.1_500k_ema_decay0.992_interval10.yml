@@ -1,0 +1,5 @@
+{
+ "save": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-eus-decay0.992-interval10",
+ "load": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-eus-decay0.992-interval10",
+ "finetune": false
+}

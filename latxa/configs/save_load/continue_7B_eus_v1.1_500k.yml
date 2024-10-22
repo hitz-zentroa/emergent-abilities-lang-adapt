@@ -1,0 +1,5 @@
+{
+ "save": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-eus-l2loss_27072024",
+ "load": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-eus-l2loss_27072024",
+ "finetune": false
+}

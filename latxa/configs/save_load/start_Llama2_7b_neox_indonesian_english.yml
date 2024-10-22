@@ -1,0 +1,5 @@
+{
+ "save": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-indonesian-english",
+ "load": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-TP-1",
+ "finetune": true
+}

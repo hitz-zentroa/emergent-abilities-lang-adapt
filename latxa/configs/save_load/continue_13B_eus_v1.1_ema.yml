@@ -1,0 +1,5 @@
+{
+ "save": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-13b-neox-eus-v1.1-ema",
+ "load": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-13b-neox-eus-v1.1-ema",
+ "finetune": false
+}

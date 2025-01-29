@@ -1,13 +1,13 @@
 #!/bin/bash
-#SBATCH -A EUHPC_E02_013
+#SBATCH -A EUHPC_E04_042
 #SBATCH -p boost_usr_prod
 #SBATCH --time 24:00:00         # format: HH:MM:SS
 #SBATCH --nodes 8               # 4 node
 #SBATCH --ntasks-per-node=4     # 4 tasks out of 32
 #SBATCH --gres=gpu:4            # 4 gpus per node out of 4
 #SBATCH --mem=494000MB              # memory per node out of 494000MB
-#SBATCH --output=.slurm/latxa-7b-v1.1_noeng2.out
-#SBATCH --error=.slurm/latxa-7b-v1.1_noeng2.err
+#SBATCH --output=.slurm/latxa-7b-v1.1_noeng3.out
+#SBATCH --error=.slurm/latxa-7b-v1.1_noeng3.err
 #SBATCH --exclusive
 #SBATCH --requeue
 
@@ -22,7 +22,7 @@ module load openmpi/4.1.4--gcc--11.3.0-cuda-11.8
 module load zlib/1.2.13--gcc--11.3.0
 module load git-lfs
 
-source $WORK/environments/neox-env-2/bin/activate
+source $WORK/environments/neox-env/bin/activate
 
 ds_report
 
@@ -35,7 +35,7 @@ export COUNT_NODE=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | wc -l)
 
 # Write the hostfile for this job here
 # Should write to a hostfile that contains lines of format `<machine IP> slots=<NUM_GPUS_PER_NODE>`
-bash ${HOME}/latxa/train/write_hostfile.sh
+bash ${HOME}/latxa_rerun_itziar/leonardo/latxa/train/write_hostfile.sh
 export DLTS_HOSTFILE=${HOME}/hostfiles/hosts_$SLURM_JOBID
 
 # Model configuration
@@ -43,7 +43,7 @@ TP=1
 PP=0
 
 # Prepare to start finetuning or continue from checkpoint
-SAVE_PATH=/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-eus-noeng_17072024
+SAVE_PATH=/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-eus-ema_17112024
 if [ -d "$SAVE_PATH" ]; then
     LOAD_PATH=$SAVE_PATH
     FINETUNE="false"
@@ -57,7 +57,7 @@ else
 fi
 
 printf '{\n "save": "%s",\n "load": "%s",\n "finetune": %s\n}' ${SAVE_PATH} ${LOAD_PATH} $FINETUNE \
-    >${HOME}/latxa/configs/save_load/${CONF_NAME}_7B_eus_v1.1_500k.yml
+    >${HOME}/latxa_rerun_itziar/leonardo/latxa/configs/save_load/${CONF_NAME}_7B_eus_v1.1_noeng.yml
 
 # Move to the gpt-neox install
 #TRAIN_PATH=/leonardo_scratch/large/userexternal/jetxaniz/gpt-neox/
@@ -67,10 +67,10 @@ cd $TRAIN_PATH
 # launch distributed job. If using `"deepspeed_slurm": true` and `"launcher": "slurm"` on a SLURM cluster,
 # then NeoX will handle the creation of a distributed run across gpus.
 python $TRAIN_PATH/deepy.py $TRAIN_PATH/train.py \
-    --conf_dir ${HOME}/latxa/configs \
+    --conf_dir ${HOME}/latxa_rerun_itziar/leonardo/latxa/configs \
     base_config.yml \
     models/llama-2-7b.yml \
     deepspeed/zero1.yml \
     hyperparameters/7B_v1.1.yml \
     data/latxa-v1.1_noeng.yml \
-    save_load/${CONF_NAME}_7B_eus_v1.1_500k.yml
+    save_load/${CONF_NAME}_7B_eus_v1.1_noeng.yml

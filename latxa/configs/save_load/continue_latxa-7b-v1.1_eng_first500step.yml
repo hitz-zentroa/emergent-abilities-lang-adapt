@@ -1,5 +1,0 @@
-{
- "save": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-eus-latxa-7b-v1.1_eng_first500step_cntd",
- "load": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-eus-latxa-7b-v1.1_eng_first500step_cntd",
- "finetune": false
-}

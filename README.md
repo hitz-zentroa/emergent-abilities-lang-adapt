@@ -19,4 +19,8 @@
 Continued pretraining (CPT) is a popular approach to adapt existing large language models (LLMs) to new languages. When doing so, it is common practice to include a portion of English data in the mixture, but its role has not been carefully studied to date. In this work, we show that including English does not impact validation perplexity, yet it is critical for the emergence of downstream capabilities in the target language. We introduce a language-agnostic benchmark for in-context learning (ICL), which reveals catastrophic forgetting early on CPT when English is not included. This in turn damages the ability of the model to generalize to downstream prompts in the target language as measured by perplexity, even if it does not manifest in terms of accuracy until later in training, and can be tied to a big shift in the model parameters. Based on these insights, we introduce curriculum learning and exponential moving average (EMA) of weights as effective alternatives to mitigate the need for English. All in all, our work sheds light into the dynamics by which emergent abilities arise when doing CPT for language adaptation, and can serve as a foundation to design more effective methods in the future.
 
 
-
+<p align="center">
+    <img src="assets/valid_loss.png" alt="Figure 2" width="45%">
+    <img src="assets/emergent_abilities.png" alt="Figure 1" width="45%">
+</p>
+<p align="center">**Continued pretraining of Llama 2 7B on Basque data with and without including English data.** Both models exhibit similar validation perplexity on Basque (left), yet the variant including English significantly outperforms on downstream tasks (right).</p>

@@ -1,5 +1,0 @@
-{
- "save": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-arabic-noenglish",
- "load": "/leonardo_scratch/large/userexternal/amohamed/Llama-2-7b-neox-TP-1",
- "finetune": true
-}

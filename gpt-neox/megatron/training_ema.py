@@ -375,18 +375,8 @@ def clamp(value, min_value=None, max_value=None):
     return value
 
 
-def get_current_decay(neox_args, inv_gamma=1, power=2/3):
-        epoch = clamp(neox_args.iteration - 1, min_value=0.)
-        value = 1 - (1 + epoch / inv_gamma) ** - power
-
-        if epoch <= 0:
-            return 0.
-
-        return clamp(value, min_value=0., max_value=0.9999)
-
 @torch.no_grad()
-def update_moving_average(ma_model, current_model, neox_args):
-    current_decay = get_current_decay(neox_args)
+def update_moving_average(ma_model, current_model):
 
     for i, (name, param) in enumerate(current_model.module.named_parameters()):
         
@@ -442,8 +432,9 @@ def forward_step(
 
     EMA_INTERVAL = 10
     if initial_checkpoint_params and neox_args.iteration%EMA_INTERVAL==0: 
-        update_moving_average(initial_checkpoint_params, model, neox_args)
-
+        update_moving_average(initial_checkpoint_params, model)
+    else:
+        update_moving_average(initial_checkpoint_params, model)
 
     if return_logits:
         return loss, outputs

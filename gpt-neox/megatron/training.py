@@ -376,41 +376,6 @@ def clamp(value, min_value=None, max_value=None):
     return value
 
 
-def get_current_decay(neox_args, inv_gamma=1, power=2/3):
-        epoch = clamp(neox_args.iteration - 1, min_value=0.)
-        value = 1 - (1 + epoch / inv_gamma) ** - power
-
-        if epoch <= 0:
-            return 0.
-
-        return clamp(value, min_value=0., max_value=0.9999)
-
-@torch.no_grad()
-def update_moving_average(ma_model, current_model, neox_args, should_update=False):
-
-    for i, (name, param) in enumerate(current_model.module.named_parameters()):
-    
-        if name in ma_model:
-            param.data.sub_((1 - 0.92) * (ma_model[name].data - param.data)) 
-    
-    if should_update:
-        for i, (name, param) in enumerate(current_model.module.named_parameters()):
-            if name in ma_model:
-                ma_model[name] = copy.deepcopy(param)
-        
-    
-
-def get_l2_norm(current_checkpoint, initial_checkpoint_params):
-    
-    l2_norms = [0]
-    for i, (name, param) in enumerate(current_checkpoint.module.named_parameters()):
-        if name in initial_checkpoint_params:
-            l2_norms.append(
-                torch.norm(param.detach() - initial_checkpoint_params[name], p=2) 
-            )
-    print_rank_0(f"\nMean L2 Norm: {sum(l2_norms) / len(l2_norms)}")
-    return sum(l2_norms) / len(l2_norms)
-
 def forward_step(
     data_iterator, model, neox_args, timers, return_logits=False, is_train=False, initial_checkpoint_params=None
 ):
@@ -439,12 +404,6 @@ def forward_step(
     loss = cross_entropy(
         outputs, (labels, loss_mask), _fp16=neox_args.fp16_lm_cross_entropy
     )
-
-    EMA_INTERVAL = 10
-    if initial_checkpoint_params and neox_args.iteration%EMA_INTERVAL==0: 
-        update_moving_average(initial_checkpoint_params, model, neox_args, should_update=True)
-    elif initial_checkpoint_params:
-        update_moving_average(initial_checkpoint_params, model, neox_args, should_update=False)
 
     if return_logits:
         return loss, outputs

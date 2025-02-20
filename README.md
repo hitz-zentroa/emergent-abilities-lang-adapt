@@ -24,4 +24,4 @@ Continued pretraining (CPT) is a popular approach to adapt existing large langua
     <img src="assets/valid_loss.png" alt="Figure 2" width="45%">
     <img src="assets/emergent_abilities.png" alt="Figure 1" width="45%">
 </p>
-<p align="center">**Continued pretraining of Llama 2 7B on Basque data with and without including English data.** Both models exhibit similar validation perplexity on Basque (left), yet the variant including English significantly outperforms on downstream tasks (right).</p>
+<p align="center"><b>Continued pretraining of Llama 2 7B on Basque data with and without including English data.</b> Both models exhibit similar validation perplexity on Basque (left), yet the variant including English significantly outperforms on downstream tasks (right).</p>
